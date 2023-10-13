@@ -1,5 +1,5 @@
 import psycopg2 as sql
-from src.sql.manager import SQLManager
+from sql.manager import SQLManager
 
 class POSTGRE(SQLManager):
     def __init__(self, dbHost, dbName, dbPort, dbUser, dbPassword):
@@ -29,8 +29,8 @@ class POSTGRE(SQLManager):
         return f"SELECT column_name FROM information_schema.columns WHERE table_name = '{table}'"
 
     def queryCreateTable(self, table:str = "tablename"):
-        print("Para crear una tabla, será necesario escribir cada columna,")
-        print("separada con comas y especificando algunos de sus atributos")
-        print(" - ejemplo: id SERIAL PRIMARY KEY, name TEXT, age INTEGER")
+        print("To create a table, it will be necessary to write each column")
+        print("separated with commas, and specifying its attributes")
+        print(" - example: id SERIAL PRIMARY KEY, name TEXT, age INTEGER")
         params = input(" -> ")
         return f"CREATE TABLE {table} ({params})"

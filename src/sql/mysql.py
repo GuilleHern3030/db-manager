@@ -1,4 +1,4 @@
-from src.sql.manager import SQLManager
+from sql.manager import SQLManager
 import MySQLdb as sql
 
 class MYSQL(SQLManager):
@@ -29,9 +29,9 @@ class MYSQL(SQLManager):
         return f"DESCRIBE {table}"
 
     def queryCreateTable(self, table:str = "tablename"):
-        print("Para crear una tabla, será necesario escribir cada columna,")
-        print("separada con comas y especificando algunos de sus atributos")
-        print(" - ejemplo: id INT AUTO_INCREMENT, name VARCHAR(90) NOT NULL, age INT,  PRIMARY KEY(id)")
-        print(" - registro de fecha: date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
+        print("To create a table, it will be necessary to write each column")
+        print("separated with commas, and specifying its attributes")
+        print(" - example: id INT AUTO_INCREMENT, name VARCHAR(90) NOT NULL, age INT,  PRIMARY KEY(id)")
+        print(" - timestamp format: date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
         params = input(" -> ")
         return f"CREATE TABLE {table} ({params})"

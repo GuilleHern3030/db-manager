@@ -8,7 +8,7 @@ def SQL(dbHost, dbName, dbPort, dbUser, dbPassword, dbType):
         from .postgre import POSTGRE
         return POSTGRE(dbHost, dbName, dbPort, dbUser, dbPassword)
     else:
-        print("El tipo de base de dato no está soportado")
+        print(f"{dbType} databases is not supported.")
         return None
 
 class SQLManager(ABC):
@@ -112,14 +112,16 @@ class SQLManager(ABC):
         print(result)
 
     def queryAddRow(self, table:str) -> str:
-        print("Nota: dejar en blanco equivale a NULL")
-        print("Nota: '-OMIT-' (sin comillas) equivale a autocompletado (id, datetime, etc)")
+        print("Note: leaving blank is equivalent to NULL")
+        print("Note: '-OMIT-' (whitout quotation marks)  is equivalent to autocomplete (id, datetime, ...)")
 
         values = []
+        print("Columns: ", end="")
         columns = self.getColumns(table)
+        self.printColumns(columns)
         columns = list(map(lambda columns: columns[0], columns))
         for i in range(len(columns)): 
-            value = input(f"Escriba el valor de '{columns[i]}': ")
+            value = input(f"Write the '{columns[i]}' value: ")
             if len(value) == 0: values.append("NULL")
             elif value.isdigit(): values.append(value)
             elif value == '-OMIT-': 
@@ -137,12 +139,12 @@ class SQLManager(ABC):
 
     def queryRemoveRow(self, table:str) -> str:
         columns = self.getColumns(table)
-        print("Columnas: ", end="")
+        print("Columns: ", end="")
         self.printColumns(columns)
-        print("Escriba la cláusula WHERE")
-        print(" - formato: NOMBRE_COLUMNA = VALOR_BUSCADO")
-        print(" - aclaración: distintas columnas se separan con comas")
-        print(" - ejemplo: id = 3, name = 'Guille'")
+        print("Write the WHERE clause")
+        print(" - format: COLUMN_NAME = VALUE_TO_FIND")
+        print(" - note: different columns are separated with commas")
+        print(" - example: id = 3, name = 'Guille'")
         whereClause = input(" -> ")
         return f"DELETE FROM {table} WHERE ({whereClause})"
 
@@ -150,19 +152,19 @@ class SQLManager(ABC):
 
         setters = []
         columns = self.getColumns(table)
-        print("Nota: dejar en blanco equivale a no modificar el valor")
+        print("Note: leaving blank is equivalent to not modifying the value")
         for column in columns:
-            value = input(f"Escriba el nuevo valor de '{column[0]}': ")
+            value = input(f"Write the new value of '{column[0]}': ")
             if len(value) == 0: continue
             elif value.isdigit(): setters.append(f"{column[0]} = {value}")
             else: setters.append(f"{column[0]} = '{value}'")
         setters = ", ".join(setters)
 
-        print("Columnas: ", end="")
+        print("Columns: ", end="")
         self.printColumns(columns)
-        print("Escriba la cláusula WHERE")
-        print(" - formato: NOMBRE_COLUMNA = VALOR_BUSCADO")
-        print(" - aclaración: distintas columnas se separan con comas")
-        print(" - ejemplo: id = 3, name = 'Guille'")
+        print("Write the WHERE clause")
+        print(" - format: COLUMN_NAME = VALUE_TO_FIND")
+        print(" - note: different columns are separated with commas")
+        print(" - example: id = 3, name = 'Guille'")
         whereClause = input(" -> ")
         return f"UPDATE {table} SET {setters} WHERE ({whereClause})"

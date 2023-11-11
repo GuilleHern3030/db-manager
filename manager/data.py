@@ -1,4 +1,6 @@
 from sys import argv as consoleParam
+from localdata.loader import loadLocalData
+from routes.colors import COLOR_YELLOW, COLOR_DEFAULT
 
 class Data():
     def __init__(self):
@@ -11,12 +13,22 @@ class Data():
         self.table = consoleParam[7] if len(consoleParam) > 7 else None
 
         self.autoConnect = len(consoleParam) > 6
+
+        if len(consoleParam) <= 1:
+            data = loadLocalData()
+            if data != None and len(data) > 0:
+                self.sqlType = data["sqlType"]
+                self.host = data["host"]
+                self.dbname = data["dbname"]
+                self.port = data["port"]
+                self.user = data["user"]
+                self.password = data["password"]
         
     def printDataBase(self):
-        print("Host:", self.host)
-        print("DataBase:", self.dbname)
-        print("Port:", self.port)
-        print("User:", self.user)
-        print("Password:", self.password)
-        print("DBType:", self.sqlType)
-        if self.table != None: print("Table:", self.table)
+        print(f" Host:{COLOR_YELLOW}", self.host, COLOR_DEFAULT)
+        print(f" DataBase:{COLOR_YELLOW}", self.dbname, COLOR_DEFAULT)
+        print(f" Port:{COLOR_YELLOW}", self.port, COLOR_DEFAULT)
+        print(f" User:{COLOR_YELLOW}", self.user, COLOR_DEFAULT)
+        print(f" Password:{COLOR_YELLOW}", self.password, COLOR_DEFAULT)
+        print(f" DBType:{COLOR_YELLOW}", self.sqlType, COLOR_DEFAULT)
+        if self.table != None: print(f" Table:{COLOR_YELLOW}", self.table, COLOR_DEFAULT)

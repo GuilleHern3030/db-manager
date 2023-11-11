@@ -9,4 +9,9 @@ def main():
         manage(sql, data)
 
 if __name__ == '__main__':
-    main()
+    try: main()
+    except Exception as err:
+        print()
+        print("An error has been ocurred!")
+        print(err)
+        input()

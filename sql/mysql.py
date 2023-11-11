@@ -1,3 +1,4 @@
+from . import inputIfNull, isParamStartsWith
 from sql.manager import SQLManager
 import MySQLdb as sql
 
@@ -16,35 +17,40 @@ class MYSQL(SQLManager):
             print("Error:", err)
             self.conection = None
     
-    def getTables(self) -> list:
-        return self.__query_fetchAll__(self.queryShowTables(), 0)
-
-    def getColumns(self, table:str = "tablename") -> list:
-        return self.__query_fetchAll__(self.queryDescribeColumns(table))
-    
-    def queryShowTables(self):
+    def queryGetTables(self):
         return "SHOW TABLES"
     
-    def queryDescribeColumns(self, table:str = "tablename"):
+    def queryGetColumns(self, table:str|None=None):
+        if isParamStartsWith(table, "DESCRIBE "): return table
+        table = inputIfNull(table, "Write the table name\n -> ")
         return f"DESCRIBE {table}"
 
-    def queryCreateTable(self, table:str = "tablename"):
-        print("To create a table, it will be necessary to write each column")
-        print("separated with commas, and specifying its attributes")
-        print(" - example: id INT AUTO_INCREMENT, name VARCHAR(90) NOT NULL, age INT,  PRIMARY KEY(id)")
-        print(" - timestamp format: date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
-        params = input(" -> ")
-        return f"CREATE TABLE {table} ({params})"
-    
-    def queryViewUsers(self):
-        return ""
+    def queryCreateTable(self, table:str|None=None, columns:list = []):
+        if isParamStartsWith(table, "CREATE TABLE "): return table
+        if len(columns) == 0:
+            print("To create a table, it will be necessary to write each column and specifying its attributes")
+            print(" - example: id INT AUTO_INCREMENT, name VARCHAR(90) NOT NULL, age INT,  PRIMARY KEY(id)")
+            print(" - timestamp format: date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
+            column = input(" -> ")
+            while (len(column) > 0):
+                columns.append(column)
+                column = input(" -> ")
+        if len(columns) == 0: raise Exception("Invalid input")
+        columns = ", ".join(columns)
+        return f"CREATE TABLE {table} ({columns})"
     
     def queryCreateUser(self, username:str|None = None, password:str|None = None):
-        return ""
+        raise Exception("Not implemented")
     
-    def queryGrantPrivilegesToUser(self, table:str|None = None, username:str|None = None, permissions:list = []):
-        return ""
+    def queryDeleteUser(self, username:str|None = None):
+        raise Exception("Not implemented")
     
-    def queryViewPrivilegesInTable(self, table:str = "tablename"):
-        return ""
+    def queryGetUsers(self):
+        raise Exception("Not implemented")
+    
+    def queryGrantPrivilegesToUser(self, username:str|None = None, privileges:list = [], table:str|None = None):
+        raise Exception("Not implemented")
+    
+    def queryGetPrivilegesInTable(self, table:str|None = None):
+        raise Exception("Not implemented")
     

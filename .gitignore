@@ -6,3 +6,4 @@ dist
 *.rar
 *.zip
 *.db
+*.pyc

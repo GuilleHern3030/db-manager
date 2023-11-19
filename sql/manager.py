@@ -112,7 +112,6 @@ class SQLManager(ABC):
         rowColumns = ", ".join(list(columns.keys()))
         values = ", ".join(list(columns.values()))
         query = f"INSERT INTO {table} ({rowColumns}) VALUES ({values})"
-        print(query)
         return query
 
     def queryRemoveRow(self, table:str|None = None, where:dict = {}) -> str:
@@ -131,7 +130,6 @@ class SQLManager(ABC):
         whereClause = []
         for key in list(where.keys()): whereClause.append(f"{key} = {where[key]}")
         whereClause = ", ".join(whereClause)
-
         return f"DELETE FROM {table} WHERE ({whereClause})"
 
     def queryEditRow(self, table:str|None = None, columns:dict = {}, where:dict = {}) -> str:
@@ -161,5 +159,4 @@ class SQLManager(ABC):
 
         setters = parseData(columns)
         whereClause = parseData(where)
-
         return f"UPDATE {table} SET {setters} WHERE ({whereClause})"
